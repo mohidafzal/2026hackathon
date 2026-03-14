@@ -40,7 +40,13 @@ export class PlacementEngine {
     }
 
     getTotalScheduledTimeForArea(areaSchedule: ScheduledAd[]): number {
-        return 0;
+        let totalScheduledTime = 0;
+
+        for(let i = 0 ; i < areaSchedule.length ; i++) {
+            totalScheduledTime += areaSchedule[i].endTime - areaSchedule[i].startTime;
+        }
+
+        return totalScheduledTime;
     }
 
     doesPlacementFitTimingConstraints(
