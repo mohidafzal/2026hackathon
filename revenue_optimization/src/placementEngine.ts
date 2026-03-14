@@ -31,7 +31,12 @@ export class PlacementEngine {
     }
 
     isAdCompatibleWithArea(ad: Ad, area: Area): boolean {
-        return false;
+        for(let i = 0 ; i <= ad.bannedLocations.length ; i++) {
+            if(ad.bannedLocations[i] === area.location) {
+                return false;
+            }
+        }
+        return true;
     }
 
     getTotalScheduledTimeForArea(areaSchedule: ScheduledAd[]): number {
