@@ -54,6 +54,13 @@ export class PlacementEngine {
         area: Area,
         startTime: number
     ): boolean {
+
+        if( (ad.timeReceived <= startTime) && 
+            (startTime <= ad.timeReceived + ad.timeout) && 
+            (area.timeWindow > startTime + ad.duration)) {
+
+            return true;
+        }
         return false;
     }
 
