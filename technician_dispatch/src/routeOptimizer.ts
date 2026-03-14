@@ -50,7 +50,7 @@ export class RouteOptimizer {
     haversineDistance(loc1: Location, loc2: Location): number {
         const R = 6371;
         const toRad = (deg: number) => (deg * Math.PI) / 180;
-        const dLat = toRad(loc2.latitude  - loc1.latitude);
+        const dLat = toRad(loc2.latitude - loc1.latitude);
         const dLng = toRad(loc2.longitude - loc1.longitude);
         const lat1 = toRad(loc1.latitude);
         const lat2 = toRad(loc2.latitude);
@@ -67,12 +67,45 @@ export class RouteOptimizer {
         boxes: Box[],
         routeIds: string[]
     ): number | null {
-        // TODO: implement this method
-        throw new Error('Not implemented');
+        let totalDist: number = 0;
+        if (boxes.length == 0 || routeIds.length == 0) {
+            return totalDist;
+        }
+        let currLoc: Location = technician.startLocation;
+        let checkedlocation: String[] = [];
+        routeIds.length
+        for (let i: number = 0; i < routeIds.length; i++) {
+            if (checkedlocation.indexOf(routeIds[i]) == -1) {
+                const box: Box | undefined = boxes.find(b => b.id == routeIds[i]);
+                if (box !== undefined) {
+                    totalDist = totalDist + this.haversineDistance(currLoc, box.location);
+                    currLoc = box.location;
+                } else {
+                    return null
+                }
+                checkedlocation.push(routeIds[i])
+            }
+
+        }
+        return totalDist;
     }
 
     findShortestRoute(technician: Technician, boxes: Box[]): RouteResult {
-        // TODO: implement this method
-        throw new Error('Not implemented');
+        const result: RouteResult = {
+            technicianId: technician.id,
+            route: [],
+            totalDistanceKm: 0
+        };
+        let lowestDist: number | null = 999999999;
+        let bestRoute: string[] = [];
+        let currRoute: string[] = [];
+        for (let i = 0; i < boxes.length; i++) {
+            bestRoute.push(boxes[i].id)
+        }
+        lowestDist = this.calculateRouteDistance(technician, boxes, bestRoute);
+        result.route = bestRoute;
+        if (lowestDist !== null)
+            result.totalDistanceKm = lowestDist;
+        return result
     }
 }
