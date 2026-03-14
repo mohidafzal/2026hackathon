@@ -68,15 +68,9 @@ export class RouteOptimizer {
         routeIds: string[]
     ): number | null {
         let totalDist: number = 0;
-        console.log(boxes, "\t ", routeIds)
         if (boxes.length == 0 || routeIds.length == 0) {
             return totalDist;
         }
-        // boxes.forEach(element => {
-        //     if (!routeIds.includes(element.id))
-        //         return null;
-        // });
-
         let currLoc: Location = technician.startLocation;
         let checkedlocation: String[] = [];
         routeIds.length
@@ -93,12 +87,25 @@ export class RouteOptimizer {
             }
 
         }
-        console.log(totalDist);
         return totalDist;
     }
 
     findShortestRoute(technician: Technician, boxes: Box[]): RouteResult {
-        // TODO: implement this method
-        throw new Error('Not implemented');
+        const result: RouteResult = {
+            technicianId: technician.id,
+            route: [],
+            totalDistanceKm: 0
+        };
+        let lowestDist: number | null = 999999999;
+        let bestRoute: string[] = [];
+        let currRoute: string[] = [];
+        for (let i = 0; i < boxes.length; i++) {
+            bestRoute.push(boxes[i].id)
+        }
+        lowestDist = this.calculateRouteDistance(technician, boxes, bestRoute);
+        result.route = bestRoute;
+        if (lowestDist !== null)
+            result.totalDistanceKm = lowestDist;
+        return result
     }
 }
